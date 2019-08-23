@@ -1,0 +1,7 @@
+{
+  "name": "audios_zomberricos",
+  "integrations": {
+    "cordova": {}
+  },
+  "type": "angular"
+}
