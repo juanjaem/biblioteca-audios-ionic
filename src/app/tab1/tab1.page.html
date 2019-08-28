@@ -8,10 +8,15 @@
 
 <ion-content>
 
-  <ion-searchbar placeholder="Buscar audio"></ion-searchbar>
-  <ion-button (click)="reordenar = !reordenar">
-    Reordenar
-  </ion-button>
+  <ion-item>
+      <ion-searchbar placeholder="Buscar audio"></ion-searchbar>
+    <ion-button (click)="reordenar = !reordenar">
+      <ion-icon name="options"></ion-icon>
+    </ion-button>
+    <ion-button (click)="reordenar = !reordenar">
+      <ion-icon name="reorder"></ion-icon>
+    </ion-button>
+  </ion-item>
 
   <ion-list>
     <ion-reorder-group (ionItemReorder)="reorderConfigurationsList($event)" [disabled]="reordenar">
@@ -27,7 +32,7 @@
         </ion-item-options>
 
         <!-- Multi-line sliding item with icon options on both sides -->
-        <ion-item (click)="reproducir(audio.fileName)">
+        <ion-item (click)="playNewAudio(audio.fileName)">
           <ion-label>
             <p>{{audio.title}}</p>
           </ion-label>
@@ -36,20 +41,6 @@
         </ion-item>
 
       </ion-item-sliding>
-
-      <!-- <ion-item>
-      <ion-label>Pues dile</ion-label>
-    </ion-item>
-
-    <ion-list-header>
-      <ion-label>Sin etiqueta</ion-label>
-    </ion-list-header>
-
-    <ion-item *ngFor="let audio of audios" (click)="reproducir()">
-      <ion-label>{{audio.title}}</ion-label>
-
-    </ion-item> -->
-
 
     </ion-reorder-group>
   </ion-list>
@@ -62,12 +53,21 @@
 <ion-footer>
 
   <ion-item>
-    <ion-range color="danger" pin="true"></ion-range>
-    <ion-button>
-      <ion-icon slot="icon-only" name="share"></ion-icon>
-    </ion-button>
-    <ion-button>
-      <ion-icon slot="icon-only" name="play"></ion-icon>
+    <ion-range
+      color="danger"
+      pin="true"
+      step="0.1"
+      [debounce]="0"
+      (ionChange)="rangeHasChanged($event)"
+      (touchstart)="rangeTouchStart()"
+      (touchend)="rangeTouchEnd($event)"
+      [max]="audioDuration"
+      [(ngModel)]="rangePosition">
+    </ion-range>
+
+    <ion-button (click)="playPause()" [disabled]="!selectedAudio">
+      <ion-icon slot="icon-only" name="play" *ngIf="audioState === AE.paused || audioState === AE.stopped"></ion-icon>
+      <ion-icon slot="icon-only" name="pause" *ngIf="audioState === AE.playing"></ion-icon>
     </ion-button>
   </ion-item>
 
