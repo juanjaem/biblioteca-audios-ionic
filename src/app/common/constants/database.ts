@@ -1,4 +1,4 @@
-export const AUDIOS = [
+export const AUDIOS_DB = [
     {
         id: 0,
         fileName: 'AUD-20190222-WA0031.opus',

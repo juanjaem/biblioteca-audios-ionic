@@ -1,0 +1,18 @@
+<ion-item>
+  <ion-range
+    color="danger"
+    pin="true"
+    step="0.1"
+    [debounce]="0"
+    (ionChange)="rangeHasChanged($event)"
+    (touchstart)="rangeTouchStart()"
+    (touchend)="rangeTouchEnd($event)"
+    [max]="audioDuration"
+    [(ngModel)]="rangePosition">
+  </ion-range>
+
+  <ion-button (click)="playPause()" [disabled]="!selectedAudio">
+    <ion-icon slot="icon-only" name="play" *ngIf="audioState === AE.paused || audioState === AE.stopped"></ion-icon>
+    <ion-icon slot="icon-only" name="pause" *ngIf="audioState === AE.playing"></ion-icon>
+  </ion-button>
+</ion-item>

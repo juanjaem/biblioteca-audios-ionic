@@ -20,7 +20,7 @@
 
   <ion-list>
     <ion-reorder-group (ionItemReorder)="reorderConfigurationsList($event)" [disabled]="reordenar">
-      <ion-item-sliding *ngFor="let audio of audios">
+      <ion-item-sliding *ngFor="let audio of audios_db">
 
         <ion-item-options side="end">
           <ion-item-option color="secondary" expandable>
@@ -32,7 +32,7 @@
         </ion-item-options>
 
         <!-- Multi-line sliding item with icon options on both sides -->
-        <ion-item (click)="playNewAudio(audio.fileName)">
+        <ion-item (click)="sendAudioToPlayer(audio.fileName)">
           <ion-label>
             <p>{{audio.title}}</p>
           </ion-label>
@@ -52,7 +52,11 @@
 <!-- REPRODUCTOR -->
 <ion-footer>
 
-  <ion-item>
+  <app-audio-player #reproductor>
+
+  </app-audio-player>
+
+  <!-- <ion-item>
     <ion-range
       color="danger"
       pin="true"
@@ -69,6 +73,6 @@
       <ion-icon slot="icon-only" name="play" *ngIf="audioState === AE.paused || audioState === AE.stopped"></ion-icon>
       <ion-icon slot="icon-only" name="pause" *ngIf="audioState === AE.playing"></ion-icon>
     </ion-button>
-  </ion-item>
+  </ion-item> -->
 
 </ion-footer>
