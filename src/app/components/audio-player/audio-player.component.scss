@@ -1,0 +1,44 @@
+ion-list {
+
+    .basicPlayer {
+        position: relative;
+        --background: lightgray;
+        // border: 1px solid black;
+        // height: 10rem;
+
+        .currentPlayTime {
+            position: absolute;
+            top: 0rem;
+            left: 0rem;
+            color: black;
+            background-color: rgb(198, 188, 255);
+            border-radius: 0.5rem;
+            padding: 0.25rem;
+
+        }
+
+        .audioDuration {
+            position: absolute;
+            top: 0rem;
+            right: 5rem;
+            color: black;
+            background-color: rgb(198, 188, 255);
+            border-radius: 0.5rem;
+            padding: 0.25rem;
+        }
+
+    }
+
+    .extendedPlayer {
+        --background: lightgray;
+
+        .optionActive {
+            --background: greenyellow;
+            --color: black;
+        }
+    }
+}
+
+.desplegarBtn {
+    height: 1.2rem;
+}
