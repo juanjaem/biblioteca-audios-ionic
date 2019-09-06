@@ -1,4 +1,8 @@
-<ion-list lines="none">
+<ion-list lines="none" class="player" [ngClass]="{'showAdvPlayer': showAdvancedPlayer}">
+
+  <div class="btnShowHideAdv" (click)="showAdvancedPlayer = !showAdvancedPlayer" [ngClass]="{'rotateBtn': showAdvancedPlayer}">
+      <ion-icon name="arrow-up" mode="ios"></ion-icon>
+  </div>
 
   <!-- REPRODUCTOR BÁSICO -->
   <ion-item class="basicPlayer">
@@ -8,7 +12,7 @@
 
     <ion-range
       color="danger"
-      pin="false"
+      pin="true"
       step="0.1"
       [debounce]="0"
       (touchstart)="rangeTouchStart()"
@@ -16,21 +20,26 @@
       [min]="sliceRangeValues.lower"
       [max]="sliceRangeValues.upper"
       [(ngModel)]="rangePosition"
-      [disabled]="!selectedAudio">
+      [ngClass]="{'dpe': dpe}">
     </ion-range>
-
-    <ion-button (click)="playPause()" [disabled]="!selectedAudio" slot="end">
-      <ion-icon slot="icon-only" name="play" *ngIf="audioState === AE.paused || audioState === AE.stopped"></ion-icon>
-      <ion-icon slot="icon-only" name="pause" *ngIf="audioState === AE.playing"></ion-icon>
-    </ion-button>
+    
+    <div>
+      <ion-button (click)="playPause()" slot="end" [ngClass]="{'dpe': dpe}" class="btnPlayPause">
+        <ion-icon slot="icon-only" name="play" *ngIf="audioState === AE.paused || audioState === AE.stopped"></ion-icon>
+        <ion-icon slot="icon-only" name="pause" *ngIf="audioState === AE.playing"></ion-icon>
+      </ion-button>
+      <div class="infoTiempo">
+        {{rangePosition | number: '1.1-1'}}
+      </div>
+    </div>
   </ion-item>
 
 
   <!-- REPRODUCTOR AMPLIADO -->
-  <ion-item class="extendedPlayer" *ngIf="showAdvancedPlayer">
+  <ion-item class="advancedPlayer">
     <ion-range
       dualKnobs="true"
-      pin="true"
+      pin="false"
       step="0.1"
       color="secondary"
       min="0"
@@ -38,41 +47,30 @@
       [(ngModel)]="sliceRangeValues"
       [debounce]="0"
       (touchstart)="sliceTouchStart()"
-      (touchend)="sliceTouchEnd()">
+      (touchend)="sliceTouchEnd()"
+      [ngClass]="{'dpe': dpe}">
     </ion-range>
   </ion-item>
 
-  <ion-item class="extendedPlayer" *ngIf="showAdvancedPlayer">
-    <ion-button (click)="loopMode = !loopMode" [ngClass]="{'optionActive': loopMode}">
+  <ion-item class="advancedPlayer">
+    <ion-button (click)="swichLoopMode()" [ngClass]="{'optionActive': loopMode, 'dpe': dpe}">
       <ion-icon name="infinite"></ion-icon>
     </ion-button>
 
-    <ion-button>
+    <ion-button [ngClass]="{'dpe': dpe}">
       <ion-icon name="rewind"></ion-icon>
     </ion-button>
-    <div>0x</div>
-    <ion-button>
+    <div [ngClass]="{'dpe': dpe}">
+      0x
+    </div>
+    <ion-button [ngClass]="{'dpe': dpe}">
       <ion-icon name="fastforward"></ion-icon>
     </ion-button>
 
-    <ion-button>
+    <ion-button [ngClass]="{'dpe': dpe}">
       <ion-icon name="volume-off"></ion-icon>
       <!-- <ion-icon name="volume-hight"></ion-icon> -->
     </ion-button>
 
-    <ion-button (click)="showAdvancedPlayer = !showAdvancedPlayer">
-      <ion-icon name="arrow-up" mode="ios"></ion-icon>
-    </ion-button>
   </ion-item>
 </ion-list>
-
-
-<!-- DESPLEGAR REPRODUCTOR AMPLIADO -->
-<ion-button
-  class="desplegarBtn"
-  (click)="showAdvancedPlayer = !showAdvancedPlayer"
-  *ngIf="!showAdvancedPlayer"
-  expand="full">
-  <ion-icon name="arrow-down" mode="ios"></ion-icon>
-</ion-button>
-

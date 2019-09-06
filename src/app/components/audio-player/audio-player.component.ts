@@ -16,11 +16,12 @@ enum AE  {
 })
 export class AudioPlayerComponent implements OnInit, OnDestroy {
 
-  usingSprite_flag = false;
+
+  AE = AE; // De esta forma AE queda accesibles al HTML
   showAdvancedPlayer: boolean = true;
-  loopMode: boolean = true;
-  loopMode_hasChanged: boolean = false;
-  reloadIsNeeded: boolean = false;
+  dpe: boolean = true;
+  loopMode: boolean = false;
+  audioState: AE = AE.stopped; // playing, paused, stopped
   playSpeed: number = 0;
   periodoDeRefresco: number = 50; // AJUSTE: Definirá el periodo de refresco (en ms) de la barra del reproductor.
   audioFileName: string;
@@ -28,9 +29,8 @@ export class AudioPlayerComponent implements OnInit, OnDestroy {
   audioDuration: number; // La duración del audio seleccionado
   interval: any; // Intervalo que hace que la barra del reproductor se mueva
   rangePosition: number = 0; // La posición en la que está el ion-range (la barra del reproductor)
-  AE = AE; // De esta forma AE queda accesibles al HTML
-  audioState: AE = AE.stopped; // playing, paused, stopped
   sliceRangeValues: {lower: number, upper: number} = {lower: 0, upper: 0};
+
 
 
   @Input() newAudioSelected = new EventEmitter<string>(); // Para indicar al componente que debe refrescar los usuarios del Site
@@ -41,8 +41,13 @@ export class AudioPlayerComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     // Suscripción a nuevos ficheros a reproducir
     this.newAudioSelected_sus = this.newAudioSelected.subscribe(async (fileName: string) => {
-      this.audioFileName = fileName;
-      this.loadAndPlayAudio(fileName, true);
+      if (this.audioFileName !== fileName) {
+        this.audioFileName = fileName;
+        this.audioDuration = await this.getAudioDuration(fileName);
+      }
+      this.sliceRangeValues.lower = 0;
+      this.sliceRangeValues.upper = this.audioDuration;
+      this.loadAndPlayAudio();
     });
   }
 
@@ -52,112 +57,78 @@ export class AudioPlayerComponent implements OnInit, OnDestroy {
   }
 
 
-  // CARGA UN AUDIO CON LAS OPCIONES DE REPRODUCCIÓN DESEADAS
-  async loadAndPlayAudio(fileName: string, isNewAudio = false) {
+  async getAudioDuration(fileName: string): Promise<number> {
+    const audio = new Howl({
+      src: [`./assets/audios/${fileName}`]
+    });
 
+    await new Promise((resolve) => {
+      audio.once('load', () => {
+        resolve();
+      });
+    });
+
+    audio.unload();
+
+    return Number(audio.duration().toFixed(2));
+  }
+
+
+  // CARGA UN AUDIO CON LAS OPCIONES DE REPRODUCCIÓN DESEADAS
+  async loadAndPlayAudio() {
     // Si hay algún fichero cargado, lo quitamos de la caché
     if (this.selectedAudio) {
       this.selectedAudio.unload();
     }
 
     // Si la barra del reproductor está moviendose, la paramos
-    if (this.interval) {
-      clearInterval(this.interval);
-    }
-
-    let spriteValue: any = {};
-    if (!isNewAudio) {
-      spriteValue = {
-        selectedSlice: [
-          this.sliceRangeValues.lower * 1000,
-          (this.sliceRangeValues.upper - this.sliceRangeValues.lower) * 1000
-        ]
-      };
-      this.rangePosition = this.sliceRangeValues.lower;
-      this.usingSprite_flag = true;
-    }
-
+    this.stopAutoAdjustSeekBar();
 
     // Seleccionamos el fichero de audio y el sprite
     this.selectedAudio = new Howl({
-      src: [`./assets/audios/${fileName}`],
-      sprite: spriteValue,
-      loop: this.loopMode
+      src: [`./assets/audios/${this.audioFileName}`],
+      sprite: { spriteValue: [this.sliceRangeValues.lower * 1000, (this.sliceRangeValues.upper - this.sliceRangeValues.lower) * 1000]}
     });
 
-
     // Cargamos el fichero de audio y esperamos a que esté listo
+    this.dpe = true;
     await new Promise((resolve) => {
       this.selectedAudio.once('load', () => {
         resolve();
       });
     });
+    this.dpe = false;
 
-
-    // Audio recién cargado
-    if (isNewAudio) {
-      this.audioDuration = Number(this.selectedAudio.duration().toFixed(2));
-      this.sliceRangeValues.lower = 0;
-      this.sliceRangeValues.upper = this.audioDuration;
-      this.rangePosition = 0;
-      this.audioState = AE.playing;
-      this.runAutoAdjustSeekBar();
-      this.selectedAudio.play();
-    } else {
-      if (this.audioState === AE.playing) {
-        this.selectedAudio.play('selectedSlice');
-        this.runAutoAdjustSeekBar();
-      }
-    }
-
+    this.rangePosition = this.sliceRangeValues.lower;
+    this.runAutoAdjustSeekBar();
+    this.audioState = AE.playing;
+    this.selectedAudio.play('spriteValue');
 
     // Cuando termine de reproducirse el audio, pondrá el estado en 'stopped'
     this.selectedAudio.on('end', () => {
       console.log('END Event');
 
       this.stopAutoAdjustSeekBar();
+      this.selectedAudio.stop();
+      this.audioState = AE.stopped;
       this.rangePosition = this.sliceRangeValues.lower;
-
-      if (this.reloadIsNeeded) {
-        this.reloadIsNeeded = false;
-        this.loadAndPlayAudio(this.audioFileName);
-        return;
-      }
 
       // ¿Está habilitado el modo Bucle?
       if (this.loopMode) {
-        // this.playLoadedAudio();
-        if (this.interval) {
-          clearInterval(this.interval);
-        }
-        this.runAutoAdjustSeekBar();
-        return;
+        this.loadAndPlayAudio();
       }
-
-      this.selectedAudio.stop();
-      this.audioState = AE.stopped;
-      console.log('Audio Finished!');
     });
-
   }
 
 
   // Play-Pause para el botón del reproductor
   playPause(): void {
     if (this.audioState === AE.stopped) {
-      this.reloadIsNeeded = false;
-      this.audioState = AE.playing;
-      this.loadAndPlayAudio(this.audioFileName);
+      this.loadAndPlayAudio();
       return;
     }
 
     if (this.audioState === AE.paused) {
-      if (this.reloadIsNeeded) {
-        this.audioState = AE.playing;
-        this.reloadIsNeeded = false;
-        this.loadAndPlayAudio(this.audioFileName);
-        return;
-      }
       this.audioState = AE.playing;
       this.selectedAudio.play();
       this.runAutoAdjustSeekBar();
@@ -176,7 +147,6 @@ export class AudioPlayerComponent implements OnInit, OnDestroy {
   // Inicia y gestiona Gestiona el movimiento de la barra del reproductor
   private runAutoAdjustSeekBar(): void {
     this.interval = setInterval(() => {
-
       this.rangePosition = this.rangePosition + this.periodoDeRefresco / 1000; // Actualizar la posicion de la barra
     }, this.periodoDeRefresco);
   }
@@ -192,15 +162,12 @@ export class AudioPlayerComponent implements OnInit, OnDestroy {
 
   // Parará el movimiento de la barra del reproductor cuando el usuario empieza a tocarlo
   rangeTouchStart() {
-    console.log('rangeTouchStart');
     this.stopAutoAdjustSeekBar();
   }
 
 
   // Cuando el usuario deja de pulsar la barra del reproductor, se cambia la posición del audio por la seleccionada por el usuario.
   rangeTouchEnd() {
-    console.log('rangeTouchEnd');
-
     setTimeout(() => {
       this.selectedAudio.seek( Number(this.rangePosition.toFixed(2)) );
 
@@ -213,21 +180,27 @@ export class AudioPlayerComponent implements OnInit, OnDestroy {
 
 
   sliceTouchStart() {
-    console.log('SliceTouchStart');
-    this.selectedAudio.stop();
     this.stopAutoAdjustSeekBar();
+    this.selectedAudio.stop();
+    if (this.audioState !== AE.playing) {
+      this.audioState = AE.stopped;
+    }
     this.rangePosition = 0;
   }
 
 
   sliceTouchEnd(): void {
-    if (this.audioState === AE.stopped || this.audioState === AE.paused) {
-      this.reloadIsNeeded = true;
-    } else {
+    if (this.audioState === AE.playing) {
       setTimeout(() => {
-        this.loadAndPlayAudio(this.audioFileName);
+        this.loadAndPlayAudio();
       }, 20);
     }
+
+  }
+
+
+  swichLoopMode() {
+    this.loopMode = !this.loopMode;
   }
 
 }

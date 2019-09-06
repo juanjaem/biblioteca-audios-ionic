@@ -1,17 +1,39 @@
-ion-list {
+// VARIABLES
+$speedAnimation: 0.5s;
+
+.player {
+    position: relative;
+    height: 4.5rem;
+    padding-top: 0;
+    padding-bottom: 0;
+    background: rgb(228, 252, 229);
+    transition: height $speedAnimation ease-in-out;
+
+    .btnShowHideAdv {
+        transition: height $speedAnimation ease-in-out, transform $speedAnimation ease-in-out;
+        position: absolute;
+        font-size: 2rem;
+        left: calc(50vw - 1rem);
+        height: 34px;
+        top: -0.5rem;
+        z-index: 10;
+    }
+
+    .rotateBtn {
+        transform: rotate(180deg);
+    }
+
 
     .basicPlayer {
         position: relative;
-        --background: lightgray;
-        // border: 1px solid black;
-        // height: 10rem;
+        --background: transparent;
 
         .currentPlayTime {
             position: absolute;
-            top: 0rem;
+            top: 1rem;
             left: 0rem;
             color: black;
-            background-color: rgb(198, 188, 255);
+            border: 1px solid lightgray;
             border-radius: 0.5rem;
             padding: 0.25rem;
 
@@ -19,24 +41,42 @@ ion-list {
 
         .audioDuration {
             position: absolute;
-            top: 0rem;
-            right: 5rem;
+            top: 1rem;
+            right: 4.2rem;
             color: black;
-            background-color: rgb(198, 188, 255);
+            border: 1px solid lightgray;
             border-radius: 0.5rem;
             padding: 0.25rem;
         }
 
+        .btnPlayPause {
+            height: 2.4rem;
+        }
+
+        .infoTiempo {
+            text-align: center;
+        }
+
     }
 
-    .extendedPlayer {
-        --background: lightgray;
+    .advancedPlayer {
+        --background: transparent;
 
         .optionActive {
             --background: greenyellow;
             --color: black;
         }
     }
+}
+
+.showAdvPlayer {
+    height: 11.5rem;
+}
+
+// Disable Touch Events
+.dpe {
+    pointer-events: none;
+    opacity: 0.5;
 }
 
 .desplegarBtn {
