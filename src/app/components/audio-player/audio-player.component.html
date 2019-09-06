@@ -1,4 +1,4 @@
-<ion-list lines="none" class="player" [ngClass]="{'showAdvPlayer': showAdvancedPlayer}">
+<ion-list lines="none" class="player" [ngClass]="{'showAdvPlayer': showAdvancedPlayer, opacity: !this.audioFileName}">
 
   <div class="btnShowHideAdv" (click)="showAdvancedPlayer = !showAdvancedPlayer" [ngClass]="{'rotateBtn': showAdvancedPlayer}">
       <ion-icon name="arrow-up" mode="ios"></ion-icon>
@@ -7,14 +7,14 @@
   <!-- REPRODUCTOR BÁSICO -->
   <ion-item class="basicPlayer">
 
-    <div class="currentPlayTime" *ngIf="selectedAudio">{{sliceRangeValues.lower | number: '1.1-1'}}</div>
-    <div class="audioDuration" *ngIf="selectedAudio">{{sliceRangeValues.upper | number: '1.1-1'}}</div>
+    <div class="currentPlayTime">{{sliceRangeValues.lower | number: '1.1-1'}}</div>
+    <div class="audioDuration">{{sliceRangeValues.upper | number: '1.1-1'}}</div>
 
     <ion-range
       color="danger"
       pin="true"
       step="0.1"
-      [debounce]="0"
+      debounce="0"
       (touchstart)="rangeTouchStart()"
       (touchend)="rangeTouchEnd()"
       [min]="sliceRangeValues.lower"
@@ -23,7 +23,7 @@
       [ngClass]="{'dpe': dpe}">
     </ion-range>
     
-    <div>
+    <div class="playPause_container">
       <ion-button (click)="playPause()" slot="end" [ngClass]="{'dpe': dpe}" class="btnPlayPause">
         <ion-icon slot="icon-only" name="play" *ngIf="audioState === AE.paused || audioState === AE.stopped"></ion-icon>
         <ion-icon slot="icon-only" name="pause" *ngIf="audioState === AE.playing"></ion-icon>
@@ -45,7 +45,7 @@
       min="0"
       [max]="audioDuration"
       [(ngModel)]="sliceRangeValues"
-      [debounce]="0"
+      debounce="0"
       (touchstart)="sliceTouchStart()"
       (touchend)="sliceTouchEnd()"
       [ngClass]="{'dpe': dpe}">
@@ -53,7 +53,7 @@
   </ion-item>
 
   <ion-item class="advancedPlayer">
-    <ion-button (click)="swichLoopMode()" [ngClass]="{'optionActive': loopMode, 'dpe': dpe}">
+    <ion-button (click)="this.loopMode = !this.loopMode;" [ngClass]="{'optionActive': loopMode, 'dpe': dpe}">
       <ion-icon name="infinite"></ion-icon>
     </ion-button>
 

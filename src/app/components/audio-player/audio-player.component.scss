@@ -3,14 +3,15 @@ $speedAnimation: 0.5s;
 
 .player {
     position: relative;
-    height: 4.5rem;
+    height: 4.5rem; // Altura de reproductor básico
     padding-top: 0;
     padding-bottom: 0;
-    background: rgb(228, 252, 229);
+    background: rgb(228, 252, 229); // Color de fondo del reproducor
     transition: height $speedAnimation ease-in-out;
 
+    // Botón de mostrar/ocultar opciones avanzadas
     .btnShowHideAdv {
-        transition: height $speedAnimation ease-in-out, transform $speedAnimation ease-in-out;
+        transition: transform $speedAnimation ease-in-out;
         position: absolute;
         font-size: 2rem;
         left: calc(50vw - 1rem);
@@ -22,7 +23,6 @@ $speedAnimation: 0.5s;
     .rotateBtn {
         transform: rotate(180deg);
     }
-
 
     .basicPlayer {
         position: relative;
@@ -49,36 +49,38 @@ $speedAnimation: 0.5s;
             padding: 0.25rem;
         }
 
-        .btnPlayPause {
-            height: 2.4rem;
-        }
+        .playPause_container{
+            width: 3rem;
 
-        .infoTiempo {
-            text-align: center;
+            .btnPlayPause {
+                height: 2.4rem;
+                width: 90%;
+            }
+    
+            .infoTiempo {
+                text-align: center;
+            }
         }
-
     }
 
     .advancedPlayer {
         --background: transparent;
 
         .optionActive {
-            --background: greenyellow;
+            --background: greenyellow; // Color de los botones activos
             --color: black;
         }
     }
 }
 
 .showAdvPlayer {
-    height: 11.5rem;
+    height: 11.5rem; // Tamaño del reproductor cuando está en modo avanzado
 }
 
-// Disable Touch Events
 .dpe {
-    pointer-events: none;
-    opacity: 0.5;
+    pointer-events: none; // Disable Touch Events
 }
 
-.desplegarBtn {
-    height: 1.2rem;
+.opacity {
+    opacity: 0.6; // Opacidad cuando no hay fichero de audio cargado
 }
