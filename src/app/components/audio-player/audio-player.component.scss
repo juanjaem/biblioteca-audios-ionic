@@ -28,6 +28,10 @@ $speedAnimation: 0.5s;
         position: relative;
         --background: transparent;
 
+        .seekRange {
+            padding-bottom: 0;
+        }
+
         .currentPlayTime {
             position: absolute;
             top: 1rem;
@@ -66,7 +70,24 @@ $speedAnimation: 0.5s;
     .advancedPlayer {
         --background: transparent;
 
-        .optionActive {
+        .sliceRange {
+            padding-bottom: 0;
+            padding-top: 0;
+        }
+
+        .speedRange {
+            padding-left: 0.5rem;
+        }
+
+        .speedText {
+            margin-left: 0.5rem;
+        }
+
+        ion-button {
+            height: 1.6rem;
+        }
+
+        .btnActive {
             --background: greenyellow; // Color de los botones activos
             --color: black;
         }
@@ -74,7 +95,7 @@ $speedAnimation: 0.5s;
 }
 
 .showAdvPlayer {
-    height: 11.5rem; // Tamaño del reproductor cuando está en modo avanzado
+    height: 11rem; // Tamaño del reproductor cuando está en modo avanzado
 }
 
 .dpe {

@@ -22,7 +22,7 @@ export class AudioPlayerComponent implements OnInit, OnDestroy {
   sliceTouchStart_flag: boolean = true;
   dpe: boolean = true; // Cuando está activo, bloquea la pulsación de todo lo que contiene el reproductor
   loopMode: boolean = false; // Habilitar/deshabilitar modo bucle
-  playSpeed: number = 0; // Velocidad de reproducción
+  playSpeed: number = 1; // Velocidad de reproducción
   audioFileName: string; // Guarda el nombre del fichero de audio a reproducir
   selectedAudio: Howl; // Guarda el audio seleccionado a reproducir
   audioDuration: number; // La duración del audio seleccionado
@@ -121,6 +121,7 @@ export class AudioPlayerComponent implements OnInit, OnDestroy {
       this.selectedAudio.seek( Number(this.rangePosition.toFixed(2)) );
     }
 
+    this.selectedAudio.rate(this.playSpeed);
     this.dpe = false; // Volvemos a habilitar los controles del reproductor
 
     // Cuando termine de reproducirse el audio, pondrá el estado en 'stopped'
@@ -164,7 +165,7 @@ export class AudioPlayerComponent implements OnInit, OnDestroy {
   // Inicia y gestiona Gestiona el movimiento de la barra del reproductor
   private runAutoAdjustSeekBar(): void {
     this.interval = setInterval(() => {
-      this.rangePosition = this.rangePosition + this.periodoDeRefresco / 1000; // Actualizar la posicion de la barra
+      this.rangePosition = this.rangePosition + this.playSpeed * this.periodoDeRefresco / 1000; // Actualizar la posicion de la barra
     }, this.periodoDeRefresco);
   }
 
@@ -218,6 +219,13 @@ export class AudioPlayerComponent implements OnInit, OnDestroy {
       } else {
         this.audioState = AE.stopped;
       }
+    }, 10);
+  }
+
+
+  changeSpeed() {
+    setTimeout(() => {
+      this.selectedAudio.rate(this.playSpeed);
     }, 10);
   }
 

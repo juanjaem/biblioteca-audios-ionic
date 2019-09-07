@@ -11,6 +11,7 @@
     <div class="audioDuration">{{sliceRangeValues.upper | number: '1.1-1'}}</div>
 
     <ion-range
+      class="seekRange"
       color="danger"
       pin="true"
       step="0.1"
@@ -38,6 +39,7 @@
   <!-- REPRODUCTOR AMPLIADO -->
   <ion-item class="advancedPlayer">
     <ion-range
+      class="sliceRange"
       dualKnobs="true"
       pin="false"
       step="0.1"
@@ -53,24 +55,31 @@
   </ion-item>
 
   <ion-item class="advancedPlayer">
-    <ion-button (click)="this.loopMode = !this.loopMode;" [ngClass]="{'optionActive': loopMode, 'dpe': dpe}">
+    <ion-button (click)="this.loopMode = !this.loopMode;" [ngClass]="{'btnActive': loopMode, 'dpe': dpe}">
       <ion-icon name="infinite"></ion-icon>
     </ion-button>
 
-    <ion-button [ngClass]="{'dpe': dpe}">
-      <ion-icon name="rewind"></ion-icon>
-    </ion-button>
-    <div [ngClass]="{'dpe': dpe}">
-      0x
-    </div>
-    <ion-button [ngClass]="{'dpe': dpe}">
-      <ion-icon name="fastforward"></ion-icon>
+    <ion-button>
+      <ion-icon name="share"></ion-icon>
     </ion-button>
 
-    <ion-button [ngClass]="{'dpe': dpe}">
-      <ion-icon name="volume-off"></ion-icon>
-      <!-- <ion-icon name="volume-hight"></ion-icon> -->
-    </ion-button>
+    <div class="speedText">
+      {{ playSpeed | number: '1.2-2' }}x
+    </div>
+
+    <ion-range
+      class="speedRange"
+      dualKnobs="false"
+      pin="false"
+      step="0.05"
+      color="tertiary"
+      min="0.5"
+      max="4"
+      [(ngModel)]="playSpeed"
+      debounce="0"
+      (touchend)="changeSpeed()"
+      [ngClass]="{'dpe': dpe}">
+    </ion-range>
 
   </ion-item>
 </ion-list>
