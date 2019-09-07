@@ -1,11 +1,11 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { AUDIOS_DB } from '../common/constants/database';
+import { AUDIOS_DB } from '../../common/constants/database';
 @Component({
-  selector: 'app-tab1',
-  templateUrl: 'tab1.page.html',
-  styleUrls: ['tab1.page.scss']
+  selector: 'app-audios',
+  templateUrl: 'audios.page.html',
+  styleUrls: ['audios.page.scss']
 })
-export class Tab1Page implements OnInit {
+export class AudiosPage implements OnInit {
 
   audios_db;
   reordenar = true;

@@ -8,45 +8,45 @@ const routes: Routes = [
     component: TabsPage,
     children: [
       {
-        path: 'tab1',
+        path: 'audios',
         children: [
           {
             path: '',
             loadChildren: () =>
-              import('../tab1/tab1.module').then(m => m.Tab1PageModule)
+              import('../audios/audios.module').then(m => m.AudiosPageModule)
           }
         ]
       },
       {
-        path: 'tab2',
+        path: 'folders',
         children: [
           {
             path: '',
             loadChildren: () =>
-              import('../tab2/tab2.module').then(m => m.Tab2PageModule)
+              import('../folders/folders.module').then(m => m.FoldersPageModule)
           }
         ]
       },
       {
-        path: 'tab3',
+        path: 'random',
         children: [
           {
             path: '',
             loadChildren: () =>
-              import('../tab3/tab3.module').then(m => m.Tab3PageModule)
+              import('../random/random.module').then(m => m.RandomPageModule)
           }
         ]
       },
       {
         path: '',
-        redirectTo: '/tabs/tab1',
+        redirectTo: '/tabs/audios',
         pathMatch: 'full'
       }
     ]
   },
   {
     path: '',
-    redirectTo: '/tabs/tab1',
+    redirectTo: '/tabs/audios',
     pathMatch: 'full'
   }
 ];
