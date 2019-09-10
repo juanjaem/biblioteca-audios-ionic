@@ -1,5 +1,6 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { AUDIOS_DB } from '../../common/constants/database';
+import { AudiosService } from '../../services/audios.service';
+
 @Component({
   selector: 'app-audios',
   templateUrl: 'audios.page.html',
@@ -7,16 +8,16 @@ import { AUDIOS_DB } from '../../common/constants/database';
 })
 export class AudiosPage implements OnInit {
 
-  audios_db;
   reordenar = true;
 
   @ViewChild('reproductor', {static: false}) reproductor: any;
 
 
-  constructor(  ) {}
+  constructor(
+    public audiosS: AudiosService,
+  ) {}
 
   ngOnInit(): void {
-    this.audios_db = AUDIOS_DB;
   }
 
 

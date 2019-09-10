@@ -1,31 +1,25 @@
 <ion-header>
   <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button></ion-back-button>
+    </ion-buttons>
+
     <ion-title>
-      Tab Two
+      Carpetas
     </ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content>
 
-  <ion-searchbar placeholder="Buscar personaje"></ion-searchbar>
+  <ion-searchbar placeholder="Buscar carpeta"></ion-searchbar>
 
   <ion-list>
 
-
-    <ion-item>
-      <ion-label>Richar</ion-label>
+    <ion-item *ngFor="let folder of audiosS.db.folders, let i=index">
+      <ion-checkbox slot="start" [(ngModel)]="audiosS.db.folders[i].show"></ion-checkbox>
+      <ion-label>{{folder.name}}</ion-label>
     </ion-item>
-
-    <ion-item>
-      <ion-label>Sinsa</ion-label>
-    </ion-item>
-
-    <ion-item>
-      <ion-label>Manolín</ion-label>
-    </ion-item>
-
-
 
   </ion-list>
 

@@ -1,48 +1,67 @@
-<!-- <ion-header>
-  <ion-toolbar>
-    <ion-title>
-      RICHAR
-    </ion-title>
-  </ion-toolbar>
-</ion-header> -->
-
 <ion-content>
 
-  <ion-item>
-      <ion-searchbar placeholder="Buscar audio"></ion-searchbar>
-    <ion-button (click)="reordenar = !reordenar">
+  <!-- fab placed to the bottom and start and on the bottom edge of the content overlapping footer with a list to the right -->
+  <ion-fab class="opciones" vertical="top" horizontal="end" slot="fixed">
+    <ion-fab-button class="mainFabButton" size="small">
+      <ion-icon name="more"></ion-icon>
+    </ion-fab-button>
+
+    <ion-fab-list side="bottom">
+      <ion-fab-button routerLink="/addfile">
+        <ion-icon name="add" mode="md"></ion-icon>
+      </ion-fab-button>
+
+      <ion-fab-button routerLink="/folders">
+        <ion-icon name="folder-open" mode="md"></ion-icon>
+      </ion-fab-button>
+
+      <ion-fab-button>
+        <ion-icon name="settings"></ion-icon>
+      </ion-fab-button>
+    </ion-fab-list>
+  </ion-fab>
+
+  <ion-item class="buscador" lines="none">
+    <ion-searchbar placeholder="Buscar audio"></ion-searchbar>
+    <!-- <ion-button (click)="reordenar = !reordenar">
       <ion-icon name="options"></ion-icon>
-    </ion-button>
-    <ion-button (click)="reordenar = !reordenar">
-      <ion-icon name="reorder"></ion-icon>
-    </ion-button>
+    </ion-button> -->
   </ion-item>
 
-  <ion-list>
-    <ion-reorder-group (ionItemReorder)="reorderConfigurationsList($event)" [disabled]="reordenar">
-      <ion-item-sliding *ngFor="let audio of audios_db">
+  <ion-list *ngFor="let folder of audiosS.db.folders">
+    <div *ngIf="folder.show">
 
-        <ion-item-options side="end">
-          <ion-item-option color="secondary" expandable>
-            <ion-icon slot="icon-only" name="pricetag"></ion-icon>
-          </ion-item-option>
-          <ion-item-option color="tertiary" expandable>
-            <ion-icon slot="icon-only" name="share"></ion-icon>
-          </ion-item-option>
-        </ion-item-options>
+    <ion-item>
+      <ion-label>
+        {{folder.name}}
+      </ion-label>
+    </ion-item>
 
-        <!-- Multi-line sliding item with icon options on both sides -->
-        <ion-item (click)="sendAudioToPlayer(audio.fileName)">
-          <ion-label>
-            <p>{{audio.title}}</p>
-          </ion-label>
+      <ion-reorder-group (ionItemReorder)="reorderConfigurationsList($event)" [disabled]="reordenar">
+        <ion-item-sliding *ngFor="let audio of folder.audios">
+  
+          <ion-item-options side="end">
+            <ion-item-option color="secondary" expandable>
+              <ion-icon slot="icon-only" name="pricetag"></ion-icon>
+            </ion-item-option>
+            <ion-item-option color="tertiary" expandable>
+              <ion-icon slot="icon-only" name="share"></ion-icon>
+            </ion-item-option>
+          </ion-item-options>
+  
+          <!-- Multi-line sliding item with icon options on both sides -->
+          <ion-item (click)="sendAudioToPlayer(audio.fileName)">
+            <ion-label>
+              <p>{{audio.title}}</p>
+            </ion-label>
+  
+            <ion-reorder slot="end"></ion-reorder>
+          </ion-item>
+  
+        </ion-item-sliding>
+      </ion-reorder-group>
 
-          <ion-reorder slot="end"></ion-reorder>
-        </ion-item>
-
-      </ion-item-sliding>
-
-    </ion-reorder-group>
+    </div>
   </ion-list>
 
 
