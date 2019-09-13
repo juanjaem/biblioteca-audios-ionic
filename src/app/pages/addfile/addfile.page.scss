@@ -1,0 +1,83 @@
+ion-content {
+    --padding-start: 0.5rem;
+    --padding-end: 0.5rem;
+    --padding-top: 0.5rem;
+    --padding-bottom: 0.5rem;
+}
+
+
+// IMAGEN EMPRESA
+.imgSiteContainer {
+    position: relative;
+    text-align: center;
+    
+    img {
+        max-width: 100%;
+        height: 8rem;
+    }
+
+    ion-button {
+        position: absolute;
+        right: 0rem;
+        --padding-start: 0.5rem;
+        --padding-end: 0.5rem;
+    }
+
+    .btn_borrar {
+        top: 3rem;
+    }
+}
+
+
+.audioItemGroup {
+    $radioBorde: 0.5rem;
+    border: 1px solid gray;
+    border-radius: $radioBorde;
+    margin-bottom: 1rem;
+    padding-bottom: 0.5rem;
+    background-color: #faf3ff;
+
+    .header {
+        border-top-left-radius: $radioBorde;
+        border-top-right-radius: $radioBorde;
+        background: #a2ffaa;
+        padding: 1rem;
+        border-bottom: 1px solid gray;
+        display: flex;
+        justify-content: space-between;
+        
+        .title_and_info {
+            width: calc(100vw - 5rem);
+            
+            .audioTitle {
+                font-weight: bold;
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+            }
+            
+            .audioInfo {
+                font-size: 0.75rem;
+                margin-top: 0.5rem;
+                display: flex !important;
+                color: gray;
+
+                div:nth-child(2) {
+                    white-space: nowrap;
+                    overflow: hidden;
+                    text-overflow: ellipsis;
+                    margin-left: 1rem;
+                }
+            }
+        }
+
+        ion-button {
+            --padding-start: 0.5rem;
+            --padding-end: 0.5rem;
+        }
+    }
+
+    ion-item {
+        --background: transparent;
+    }
+}

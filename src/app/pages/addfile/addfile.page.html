@@ -1,5 +1,6 @@
 <ion-header>
   <ion-toolbar>
+
     <ion-buttons slot="start">
       <ion-back-button></ion-back-button>
     </ion-buttons>
@@ -7,9 +8,85 @@
     <ion-title>
       Añadir audio
     </ion-title>
+
+    <ion-buttons slot="end">
+      <ion-button (click)="imgSiteInput.click()" color="primary">
+          <ion-icon name="add-circle-outline" mode='md'></ion-icon>
+      </ion-button>
+  
+      <ion-button class="btn_borrar" color="danger" (click)="stdFiles = []">
+        <ion-icon name="trash"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+
   </ion-toolbar>
 </ion-header>
 
+
 <ion-content>
+
+  <input
+    style="display: none"
+    type="file"
+    accept="audio/*"
+    multiple
+    (change)="handleFileInput($event.target.files)"
+    #imgSiteInput>
+
+
+  <div class="audioItemGroup" *ngFor="let file of stdFiles">
+    <div class="header">
+      <div class="title_and_info">
+        <div class="audioTitle">
+          {{file.name}}
+        </div>
+    
+        <div class="audioInfo">
+          <div>{{file.size / 1024 | number : '1.1-1'}}KB</div>
+          <div>{{file.lastModified | date : 'dd/MM/yyyy HH:mm:ss'}}</div>
+          <!-- <span>{{file.type}}</span> -->
+        </div>
+      </div>
+      
+      <ion-button>
+          <ion-icon name="save" mode="md"></ion-icon>
+      </ion-button>
+    </div>
+
+    <ion-item>
+      <ion-label position="floating">
+        Titulo
+      </ion-label>
+      <ion-input></ion-input>
+    </ion-item>
+
+    <ion-item>
+      <ion-label position="floating">
+        Etiqueta
+      </ion-label>
+      <ion-input></ion-input>
+    </ion-item>
+
+    <ion-item>
+      <ion-label position="floating">
+        Carpeta
+      </ion-label>
+      <ion-select>
+        <ion-select-option value="brown">Richard</ion-select-option>
+        <ion-select-option value="blonde">Manolín</ion-select-option>
+        <ion-select-option value="blonde">+CREAR NUEVA</ion-select-option>
+      </ion-select>
+    </ion-item>
+
+    <ion-item>
+      <ion-label position="floating">
+        Etiqueta
+      </ion-label>
+      <ion-input></ion-input>
+    </ion-item>
+
+  </div>
+
+
 
 </ion-content>
