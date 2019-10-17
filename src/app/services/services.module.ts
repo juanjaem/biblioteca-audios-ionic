@@ -5,6 +5,7 @@ import { CommonModule } from '@angular/common';
 import { AudiosService } from './audios.service';
 import { UtilsService } from './utils.service';
 import { SessionService } from './session.service';
+import { DatabaseService } from './database.service';
 
 
 
@@ -13,6 +14,7 @@ import { SessionService } from './session.service';
     AudiosService,
     UtilsService,
     SessionService,
+    DatabaseService,
   ],
   declarations: [],
   imports: [

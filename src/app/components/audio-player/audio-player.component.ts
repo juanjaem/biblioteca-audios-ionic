@@ -18,12 +18,12 @@ export class AudioPlayerComponent implements OnInit, OnDestroy {
 
   AE = AE; // De esta forma el enum AE queda accesibles al HTML
   audioState: AE = AE.stopped; // Estado de la reproducción: playing, paused, stopped
-  showAdvancedPlayer: boolean = true; // Mostrar/ocultar reproductor avanzado
+  showAdvancedPlayer: boolean = false; // Mostrar/ocultar reproductor avanzado
   sliceTouchStart_flag: boolean = true;
   dpe: boolean = true; // Cuando está activo, bloquea la pulsación de todo lo que contiene el reproductor
   loopMode: boolean = false; // Habilitar/deshabilitar modo bucle
   playSpeed: number = 1; // Velocidad de reproducción
-  audioFileName: string; // Guarda el nombre del fichero de audio a reproducir
+  audioFileUrl: string; // Guarda la ubicación del fichero de audio a reproducir
   selectedAudio: Howl; // Guarda el audio seleccionado a reproducir
   audioDuration: number; // La duración del audio seleccionado
   periodoDeRefresco: number = 50; // Define el periodo de refresco (en ms) de la barra del reproductor.
@@ -38,15 +38,15 @@ export class AudioPlayerComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     // Suscripción a nuevos ficheros a reproducir
-    this.newAudioSelected_sus = this.newAudioSelected.subscribe(async (fileName: string) => {
+    this.newAudioSelected_sus = this.newAudioSelected.subscribe(async (fileUrl: string) => {
       // ?Estamos intentando cargar el mismo fichero que había cargado?
-      if (this.audioFileName !== fileName) {
+      if (this.audioFileUrl !== fileUrl) {
         if (this.selectedAudio) {
           this.selectedAudio.unload();
         }
         this.stopAutoAdjustSeekBar();
-        this.audioFileName = fileName;
-        this.audioDuration = await this.getAudioDuration(fileName);
+        this.audioFileUrl = fileUrl;
+        this.audioDuration = await this.getAudioDuration(fileUrl);
       }
 
       this.sliceRangeValues = {lower: 0, upper: this.audioDuration};
@@ -63,9 +63,9 @@ export class AudioPlayerComponent implements OnInit, OnDestroy {
 
 
   // Obtiene la duración del audio a cargar
-  async getAudioDuration(fileName: string): Promise<number> {
+  async getAudioDuration(fileUrl: string): Promise<number> {
     const audio = new Howl({
-      src: [`./assets/audios/${fileName}`]
+      src: [fileUrl]
     });
 
     await new Promise((resolve) => {
@@ -94,7 +94,7 @@ export class AudioPlayerComponent implements OnInit, OnDestroy {
 
     // Seleccionamos el fichero de audio y el sprite
     this.selectedAudio = new Howl({
-      src: [`./assets/audios/${this.audioFileName}`],
+      src: [this.audioFileUrl],
       sprite: { spriteValue: [this.sliceRangeValues.lower * 1000, (this.sliceRangeValues.upper - this.sliceRangeValues.lower) * 1000]}
     });
 

@@ -10,11 +10,11 @@
     </ion-title>
 
     <ion-buttons slot="end">
-      <ion-button (click)="imgSiteInput.click()" color="primary">
+      <ion-button class="headerBtns" (click)="imgSiteInput.click()" color="primary">
           <ion-icon name="add-circle-outline" mode='md'></ion-icon>
       </ion-button>
   
-      <ion-button class="btn_borrar" color="danger" (click)="stdFiles = []">
+      <ion-button class="headerBtns" color="danger" (click)="stdFiles = []">
         <ion-icon name="trash"></ion-icon>
       </ion-button>
     </ion-buttons>
@@ -28,65 +28,88 @@
   <input
     style="display: none"
     type="file"
-    accept="audio/*"
+    accept=".pcm,.mp3,.acc,.vorbis,.opus,.flac"
     multiple
     (change)="handleFileInput($event.target.files)"
     #imgSiteInput>
 
 
-  <div class="audioItemGroup" *ngFor="let file of stdFiles">
-    <div class="header">
-      <div class="title_and_info">
-        <div class="audioTitle">
-          {{file.name}}
+
+  <div *ngIf="loaded_flag">
+    <div class="audioItemGroup" *ngFor="let file of stdFiles; let i= index">
+      <div class="header">
+        <div class="title_and_info">
+          <div class="audioTitle">
+            {{file.name}}
+          </div>
+      
+          <div class="audioInfo">
+            <div>{{file.size / 1024 | number : '1.1-1'}}KB</div>
+            <div>{{file.lastModified | date : 'dd/MM/yyyy HH:mm:ss'}}</div>
+            <!-- <span>{{file.type}}</span> -->
+          </div>
         </div>
+        
+        <div class="buttons">
+          <ion-button (click)="guardarAudio(i)">
+              <ion-icon name="save" mode="md"></ion-icon>
+          </ion-button>
     
-        <div class="audioInfo">
-          <div>{{file.size / 1024 | number : '1.1-1'}}KB</div>
-          <div>{{file.lastModified | date : 'dd/MM/yyyy HH:mm:ss'}}</div>
-          <!-- <span>{{file.type}}</span> -->
+          <ion-button (click)="sendAudioToPlayer(i)">
+              <ion-icon name="play" mode="md"></ion-icon>
+          </ion-button>
         </div>
       </div>
-      
-      <ion-button>
-          <ion-icon name="save" mode="md"></ion-icon>
-      </ion-button>
+  
+      <ion-item>
+        <ion-label position="floating">
+          Titulo
+        </ion-label>
+        <ion-input
+          [(ngModel)]="audios[i].fileName"
+          [placeholder]="file.name">
+
+        </ion-input>
+      </ion-item>
+  
+      <div class="folder">
+        <ion-item>
+          <ion-select #ionSelect_folder
+            [(ngModel)]="audios[i].id"
+            [placeholder]="databaseS.db_mod.folders.length === 0 ? 'No existen carpetas' : 'Elija una carpeta'"
+            interface="popover"
+            [disabled]="databaseS.db_mod.folders.length === 0"
+            >
+            <ion-select-option
+              *ngFor="let folder of databaseS.db_mod.folders"
+              [value]="folder.id">
+              {{folder.name}}
+            </ion-select-option>
+          </ion-select>
+        </ion-item>
+        <ion-button (click)="showAlertAddFolder(i)">
+          <img src="./assets/svg_icons/add-folder.svg">
+        </ion-button>
+      </div>
+
+  
+      <!-- <ion-item>
+        <ion-label position="floating">
+          Etiqueta
+        </ion-label>
+        <ion-input></ion-input>
+        <ion-button>
+          Añadir etiqueta
+        </ion-button>
+      </ion-item> -->
     </div>
-
-    <ion-item>
-      <ion-label position="floating">
-        Titulo
-      </ion-label>
-      <ion-input></ion-input>
-    </ion-item>
-
-    <ion-item>
-      <ion-label position="floating">
-        Etiqueta
-      </ion-label>
-      <ion-input></ion-input>
-    </ion-item>
-
-    <ion-item>
-      <ion-label position="floating">
-        Carpeta
-      </ion-label>
-      <ion-select>
-        <ion-select-option value="brown">Richard</ion-select-option>
-        <ion-select-option value="blonde">Manolín</ion-select-option>
-        <ion-select-option value="blonde">+CREAR NUEVA</ion-select-option>
-      </ion-select>
-    </ion-item>
-
-    <ion-item>
-      <ion-label position="floating">
-        Etiqueta
-      </ion-label>
-      <ion-input></ion-input>
-    </ion-item>
-
   </div>
 
 
-
 </ion-content>
+
+<ion-footer>
+
+  <app-audio-player #reproductor></app-audio-player>
+
+</ion-footer>

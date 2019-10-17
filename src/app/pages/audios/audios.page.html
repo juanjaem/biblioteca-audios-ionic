@@ -50,7 +50,7 @@
           </ion-item-options>
   
           <!-- Multi-line sliding item with icon options on both sides -->
-          <ion-item (click)="sendAudioToPlayer(audio.fileName)">
+          <ion-item (click)="sendAudioToPlayer('./assets/audios/' + audio.fileName)">
             <ion-label>
               <p>{{audio.title}}</p>
             </ion-label>

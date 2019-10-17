@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import { PreloadAllModules, RouterModule, Routes } from '@angular/router';
 
 const routes: Routes = [
-  { path: '', redirectTo: 'audios', pathMatch: 'full' },
+  { path: '', redirectTo: 'addfile', pathMatch: 'full' },
   {
     path: 'audios',
     loadChildren: () => import('./pages/audios/audios.module').then(m => m.AudiosPageModule)

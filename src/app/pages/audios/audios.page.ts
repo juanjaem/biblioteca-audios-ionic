@@ -27,8 +27,8 @@ export class AudiosPage implements OnInit {
   }
 
   // Reproduce el audio que le indiquemos
-  sendAudioToPlayer(fileName: string) {
-    this.reproductor.newAudioSelected.emit(fileName);
+  sendAudioToPlayer(fileUrl: string) {
+    this.reproductor.newAudioSelected.emit(fileUrl);
   }
 
 }
